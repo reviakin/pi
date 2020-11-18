@@ -16,4 +16,11 @@ def madeJson(req):
 
 
 if __name__ == '__main__':
-    print(madeJson(repos_with_most_stars(total_count=5)).get("items"))
+    items = madeJson(repos_with_most_stars(total_count=10)).get('items')
+
+    for i in items:
+        language = i.get('language')
+        stars = i.get('stargazers_count')
+        name = i.get('name')
+
+        print(f"{name} / {language} : {stars}")
