@@ -1,6 +1,8 @@
 def upper_case_word(word):
     return word.upper()
 
+print(__name__)
+
 if __name__ == '__main__':
 
     greetings = ["hello", 'bonjour', 'hola']
