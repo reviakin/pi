@@ -7,6 +7,8 @@ def repos_with_most_stars(total_count=10, min_stars=50000):
 
     params = {
         "q": create_query(min_stars=min_stars, languages=["JavaScript"]),
+        "sort": "stars",
+        "order": "desk",
         "total_count": f"{total_count} "
     }
 
