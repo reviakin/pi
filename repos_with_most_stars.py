@@ -1,18 +1,30 @@
 import requests
 
 
-def repos_with_most_stars(total_count=10, min_stars=50000):
+def repos_with_most_stars(
+    total_count=10,
+    min_stars=50000,
+    sort="stars",
+    order="desk"
+):
 
     gh_api_repo_search_url = "https://api.github.com/search/repositories"
 
     params = {
         "q": create_query(min_stars=min_stars, languages=["JavaScript"]),
-        "sort": "stars",
-        "order": "desk",
+        "sort": sort,
+        "order": order,
         "total_count": f"{total_count} "
     }
 
-    return requests.get(gh_api_repo_search_url, params=params)
+    response = requests.get(gh_api_repo_search_url, params=params)
+
+    if response.status_code != 200:
+        raise RuntimeError(
+            f"an error occurred. status code was {response.status_code}"
+        )
+    else:
+        return response.json().get('items')
 
 
 def create_query(min_stars, languages):
@@ -28,11 +40,11 @@ def create_query(min_stars, languages):
 
 
 if __name__ == '__main__':
-    items = repos_with_most_stars(total_count=10).json().get('items')
+    repos = repos_with_most_stars(total_count=10)
 
-    for i in items:
-        language = i.get('language')
-        stars = i.get('stargazers_count')
-        name = i.get('name')
+    for repo in repos:
+        language = repo.get('language')
+        stars = repo.get('stargazers_count')
+        name = repo.get('name')
 
         print(f"'{name}' on {language} : {stars} ⭐️")
