@@ -1,12 +1,28 @@
 import requests
 
 
-def repos_with_most_stars(total_count=10, min_star=50000):
+def repos_with_most_stars(total_count=10, min_stars=50000):
+
     gh_api_repo_search_url = "https://api.github.com/search/repositories"
 
-    params = {"q": f"stars:>{min_star} ", "total_count": total_count}
+    params = {
+        "q": create_query(min_stars=min_stars, languages=["JavaScript"]),
+        "total_count": f"{total_count} "
+    }
 
     return requests.get(gh_api_repo_search_url, params=params)
+
+
+def create_query(min_stars, languages):
+    query = f"stars:>{min_stars} "
+
+    if languages == None:
+        languages = ["JavaScript", "Python"]
+
+    for language in languages:
+        query += f"language:{language} "
+
+    return query
 
 
 if __name__ == '__main__':
