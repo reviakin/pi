@@ -1,26 +1,20 @@
 import requests
 
 
-def repos_with_most_stars(total_count=10, q="stars:>50000"):
+def repos_with_most_stars(total_count=10, min_star=50000):
     gh_api_repo_search_url = "https://api.github.com/search/repositories"
 
-    params = {"q": q, "total_count": total_count}
+    params = {"q": f"stars:>{min_star} ", "total_count": total_count}
 
-    response = requests.get(gh_api_repo_search_url, params=params)
-
-    return response
-
-
-def madeJson(req):
-    return req.json()
+    return requests.get(gh_api_repo_search_url, params=params)
 
 
 if __name__ == '__main__':
-    items = madeJson(repos_with_most_stars(total_count=10)).get('items')
+    items = repos_with_most_stars(total_count=10).json().get('items')
 
     for i in items:
         language = i.get('language')
         stars = i.get('stargazers_count')
         name = i.get('name')
 
-        print(f"{name} / {language} : {stars}")
+        print(f"'{name}' on {language} : {stars} ⭐️")
