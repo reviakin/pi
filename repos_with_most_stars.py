@@ -1,4 +1,5 @@
 import requests
+from repository import Repository
 
 
 def repos_with_most_stars(
@@ -43,8 +44,10 @@ if __name__ == '__main__':
     repos = repos_with_most_stars(total_count=10)
 
     for repo in repos:
-        language = repo.get('language')
-        stars = repo.get('stargazers_count')
-        name = repo.get('name')
+        item = Repository(
+            name=repo.get('name'),
+            number_of_stars=repo.get('stargazers_count'),
+            language=repo.get('language'),
+        )
 
-        print(f"'{name}' on {language} : {stars} ⭐️")
+        print(item)
