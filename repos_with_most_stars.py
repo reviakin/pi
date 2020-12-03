@@ -1,5 +1,7 @@
 import requests
+
 from repository import Repository
+from exceptions import GitHubApiError
 
 
 def repos_with_most_stars(
@@ -20,12 +22,10 @@ def repos_with_most_stars(
 
     response = requests.get(gh_api_repo_search_url, params=params)
 
-    if response.status_code != 200:
-        raise RuntimeError(
-            f"an error occurred. status code was {response.status_code}"
-        )
-    else:
+    if response.status_code == 200:
         return response.json().get('items')
+    else:
+        raise GitHubApiError(response.status_code)
 
 
 def create_query(min_stars, languages):
